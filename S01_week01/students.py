@@ -6,7 +6,13 @@ class Student:
 
 if __name__ == "__main__":
     person1 = Student()
-    print(person1.name)
+    person1.id = "D000123"
+    person1.name = "Henry Higgins"
+    person1.module = "Automation"
+
     person2 = Student()
-    print(person2)
-    person3 = Student()
+
+    # Create a list from the two objects
+    people = [person1, person2]
+    for person in people:
+        print(f"Person name: {person.name}")
