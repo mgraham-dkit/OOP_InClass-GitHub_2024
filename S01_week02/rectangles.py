@@ -25,6 +25,19 @@ def find_biggest(rectangles):
     else:
         return None
 
+def find_smallest(rectangles):
+    if len(rectangles) > 0:
+        pos = 0
+        min_rect = rectangles[0]
+
+        for i, r in enumerate(rectangles):
+            if r.calc_area() < min_rect.calc_area():
+                min_rect = r
+                pos = i
+
+        return i
+    else:
+        return None
 
 rectangles = []
 
@@ -38,3 +51,8 @@ if biggest is not None:
 else:
     print("No rectangles found")
 
+smallest_pos = find_smallest(rectangles)
+if smallest_pos is not None:
+    print(f"The smallest rectangle was found at position {smallest_pos}")
+else:
+    print("No rectangles found")
