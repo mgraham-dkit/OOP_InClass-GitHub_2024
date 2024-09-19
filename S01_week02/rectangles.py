@@ -4,9 +4,12 @@ from shapes import Rectangle
 def create_rectangle():
     length = int(input("Please enter the length: "))
     width = int(input("Please enter the width: "))
-    colour = input("Please enter the colour: ")
-
-    rect = Rectangle(length, width, colour)
+    choice = input("Do you want a colour? Y to add, any other key for transparent.")
+    if choice.upper() is "Y":
+        colour = input("Please enter the colour: ")
+        rect = Rectangle(length, width, colour)
+    else:
+        rect = Rectangle(length, width)
 
     return rect
 
@@ -33,4 +36,5 @@ biggest = find_biggest(rectangles)
 if biggest is not None:
     biggest.display()
 else:
-    print("No max rectangle found")
+    print("No rectangles found")
+
