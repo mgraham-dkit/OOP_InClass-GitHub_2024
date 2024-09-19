@@ -10,6 +10,14 @@ def find_by_colour(rectangles, colour):
     return filtered
 
 
+def display_rectangles(rectangles):
+    if len(rectangles) == 0:
+        print("No rectangles found!")
+    else:
+        for rect in rectangles:
+            rect.display()
+
+
 def create_rectangle():
     length = int(input("Please enter the length: "))
     width = int(input("Please enter the width: "))
@@ -69,3 +77,7 @@ if smallest_pos is not None:
 else:
     print("No rectangles found")
 
+colour = "red"
+print(f"Now seeking all rectangles in colour {colour}")
+filtered = find_by_colour("red")
+display_rectangles(filtered)
