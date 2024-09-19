@@ -1,5 +1,5 @@
 class Rectangle:
-    def __init__(self, length, width, colour):
+    def __init__(self, length, width, colour="Transparent"):
         self.length = length
         self.width = width
         self.colour = colour
