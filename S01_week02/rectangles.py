@@ -1,6 +1,15 @@
 from shapes import Rectangle
 
 
+def find_by_colour(rectangles, colour):
+    filtered = []
+    for rectangle in rectangles:
+        if rectangle.colour.upper() is colour.upper():
+            filtered.append(rectangle)
+
+    return filtered
+
+
 def create_rectangle():
     length = int(input("Please enter the length: "))
     width = int(input("Please enter the width: "))
@@ -13,6 +22,7 @@ def create_rectangle():
 
     return rect
 
+
 def find_biggest(rectangles):
     if len(rectangles) > 0:
         max_rect = rectangles[0]
@@ -24,6 +34,7 @@ def find_biggest(rectangles):
         return max_rect
     else:
         return None
+
 
 def find_smallest(rectangles):
     if len(rectangles) > 0:
@@ -38,6 +49,7 @@ def find_smallest(rectangles):
         return i
     else:
         return None
+
 
 rectangles = []
 
@@ -56,3 +68,4 @@ if smallest_pos is not None:
     print(f"The smallest rectangle was found at position {smallest_pos}")
 else:
     print("No rectangles found")
+
