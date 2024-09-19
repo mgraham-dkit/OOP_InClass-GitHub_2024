@@ -4,7 +4,7 @@ from shapes import Rectangle
 def find_by_colour(rectangles, colour):
     filtered = []
     for rectangle in rectangles:
-        if rectangle.colour.upper() is colour.upper():
+        if rectangle.colour.upper() == colour.upper():
             filtered.append(rectangle)
 
     return filtered
@@ -22,7 +22,7 @@ def create_rectangle():
     length = int(input("Please enter the length: "))
     width = int(input("Please enter the width: "))
     choice = input("Do you want a colour? Y to add, any other key for transparent.")
-    if choice.upper() is "Y":
+    if choice.upper() == "Y":
         colour = input("Please enter the colour: ")
         rect = Rectangle(length, width, colour)
     else:
@@ -79,5 +79,5 @@ else:
 
 colour = "red"
 print(f"Now seeking all rectangles in colour {colour}")
-filtered = find_by_colour("red")
+filtered = find_by_colour(rectangles, "red")
 display_rectangles(filtered)
