@@ -20,7 +20,7 @@ class Pizza:
         # If it's not valid, use a default value
         if not Pizza.validate_size(size):
             size = "medium"
-        self._size = size
+        self._size = size.lower()
 
         # If no toppings were supplied, create an empty list
         # to hold any potential toppings added in future
