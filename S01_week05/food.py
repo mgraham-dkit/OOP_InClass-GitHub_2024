@@ -59,3 +59,27 @@ class Pizza:
 
     def __str__(self):
         return f"{self._size} pizza with {self._toppings}"
+
+
+class Order:
+
+    def __init__(self, pizzas=None):
+        if pizzas is None:
+            pizzas = []
+
+        self.pizzas = pizzas
+
+    def calc_price(self):
+        total = 0
+        for order in self.pizzas:
+            total += order.calc_price()
+
+        return total
+
+    def add_pizza(self, pizza):
+        if pizza is not None:
+            self.pizzas.append(pizza)
+
+    def remove_pizza(self, pizza):
+        if pizza is not None:
+            self.pizzas.remove(pizza)
