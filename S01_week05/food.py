@@ -58,7 +58,14 @@ class Pizza:
         return base_price + toppings_price
 
     def __str__(self):
-        return f"{self._size} pizza with {self._toppings}"
+        if not self._toppings:
+            toppings = "no toppings."
+        else:
+            toppings = self._toppings[0]
+            for i in range(1, len(self._toppings)):
+                toppings += f", {self._toppings[i]}"
+
+        return f"{self._size} pizza with {toppings}"
 
 
 class Order:
