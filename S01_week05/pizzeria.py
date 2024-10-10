@@ -1,6 +1,7 @@
 from food import Pizza
 from food import Order
 
+
 def choose_topping():
     print("Available toppings:")
     for i, topping in enumerate(Pizza.topping_options):
@@ -43,7 +44,7 @@ def get_toppings():
     toppings = []
     finished = False
     while not finished:
-        choice = input("Do you wish to add a new topping to your pizza? (Y for yes, any other key for no):> ")
+        choice = input("Do you wish to add a new topping to your item? (Y for yes, any other key for no):> ")
         if choice.upper() == "Y":
             new_topping = choose_topping()
             if new_topping is not None:
@@ -56,12 +57,22 @@ def get_toppings():
 
 
 def create_pizza():
+    pizza_name = input("Please enter your item's name: ")
     size = choose_size()
     toppings = get_toppings()
-    return Pizza(size, toppings)
+    return Pizza(pizza_name, size=size, toppings=toppings)
 
 
-new_pizza = create_pizza()
-print("Pizza complete!")
-print(f"You have ordered: {new_pizza} for €{new_pizza.calc_price()}")
+order = Order()
+finished = False
+while not finished:
+    new_pizza = create_pizza()
+    print("Pizza complete!")
+    order.add_item(new_pizza)
+    print(f"You have ordered: {new_pizza} for €{new_pizza.calc_price()}")
+    choice = input("Do you wish to add another pizza to your order? (Y for yes, any other key for no):> ")
+    if choice.upper() != "Y":
+        finished = True
 
+
+print(order)

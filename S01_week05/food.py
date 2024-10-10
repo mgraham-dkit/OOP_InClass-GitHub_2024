@@ -1,4 +1,13 @@
-class Pizza:
+class Item:
+    def __init__(self, name, desc="To be added later."):
+        self.name = name
+        self.desc = desc
+
+    def __str__(self):
+        return f"{self.name}: {self.desc}"
+
+
+class Pizza(Item):
     # Shared information - one copy shared by all Pizza instances
     # Reference these using Pizza.variable_name
     size_options = {
@@ -14,7 +23,8 @@ class Pizza:
     topping_price = 0.85
 
     # Constructor - deals with information for a specific Pizza instance
-    def __init__(self, size="medium", toppings=None):
+    def __init__(self, pizza_name, pizza_desc="Custom pizza", size="medium", toppings=None):
+        super().__init__(pizza_name, pizza_desc)
         # As there are only a specific set of allowable sizes,
         # confirm that the supplied one is allowable before using it
         # If it's not valid, use a default value
@@ -65,28 +75,45 @@ class Pizza:
             for i in range(1, len(self._toppings)):
                 toppings += f", {self._toppings[i]}"
 
-        return f"{self._size} pizza with {toppings}"
+        return super().__str__() + "\n" + f"{self._size.capitalize()} pizza with {toppings}"
 
 
 class Order:
+    def __init__(self, items=None):
+        if items is None:
+            items = {}
 
-    def __init__(self, pizzas=None):
-        if pizzas is None:
-            pizzas = []
-
-        self.pizzas = pizzas
+        self.items = items
 
     def calc_price(self):
         total = 0
-        for order in self.pizzas:
+        for order in self.items.values():
             total += order.calc_price()
 
         return total
 
-    def add_pizza(self, pizza):
-        if pizza is not None:
-            self.pizzas.append(pizza)
+    def add_item(self, item):
+        # Check if there is an item to be added
+        # Check that the item name isn't already used
+        if item is None or item.name.lower() in self.items:
+            return False
 
-    def remove_pizza(self, pizza):
-        if pizza is not None:
-            self.pizzas.remove(pizza)
+        # Add the new item to the dictionary with its name as the key
+        self.items[item.name.lower()] = item
+        return True
+
+    def remove_item(self, item):
+        # Check that item to be removed exists
+        if item is None:
+            return False
+
+        # Check that item is not in dictionary
+        if item.name.lower() not in self.items:
+            return False
+
+        # Remove item from dictionary
+        del self.items[item.name.lower()]
+        return True
+
+    def __str__(self):
+        return "Items: \n" + "\n".join(str(item) for item in self.items.values())
