@@ -13,7 +13,7 @@ class Animal:
         return int((num_days / 365))
 
     def display(self):
-        print(f"This Animal was born on {self.dob} weighing {self.weight}. Its name is {self.name}.")
+        print(f"{self.name} was born on {self.dob}, weighing {self.weight}.")
 
 
 class Dog(Animal):
@@ -24,4 +24,4 @@ class Dog(Animal):
 
     def display(self):
         super().display()
-        print(f"Its breed is {self.breed}, with major {self.personality} personality.")
+        print(f"\tIts breed is {self.breed}, with major {self.personality} personality.")
