@@ -56,5 +56,12 @@ animals.append(d2)
 
 rand.shuffle(animals)
 
+print("Animals in the menagerie:")
 for a in animals:
     a.display()
+print()
+
+print("Animals aged 2 and under:")
+for a in animals:
+    if a.calc_age() <= 2:
+        a.display()
