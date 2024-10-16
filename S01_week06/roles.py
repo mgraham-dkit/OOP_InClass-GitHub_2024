@@ -16,7 +16,7 @@ class Person:
 
 
 class Student(Person):
-    # This should be a static list of valid course names and should be private
+    # This should be a static list of valid course names and should be private.
     # Private is achieved by using _ on the variable name
     # This is a static variable because it's been made outside all methods and is not referenced with self.
     _courses = ["computing systems and operations", "computing", "software development", "business", "irish history", "data science"]
@@ -46,6 +46,7 @@ class Student(Person):
         self.year = year
 
     # To clean up our validation, we can write a separate method to check if a supplied course name is allowable
+    # This is a static method as it's not operating on any of the object's information
     @staticmethod
     def validate_course(course_name):
         # Check if the name is none before we do anything - this avoids crashing on the lower() call
@@ -56,3 +57,30 @@ class Student(Person):
 
         # If it passes the above checks, return true because the name is valid
         return True
+
+    # As specified, this one is defined explicitly as just a static method, not a class method
+    @staticmethod
+    # Create a static method to get the list of valid courses
+    def get_valid_courses():
+        # We don't give back the actual list of valid courses
+        # as we don't want to let others have a way to change the list directly
+        # Make a copy so that any changes they make would not impact the list here
+        valid_courses = Student._courses.copy()
+        return valid_courses
+
+    # As specified, this one is a class method, not just a static method
+    @classmethod
+    def add_course(cls, course_name):
+        # Convert the name to lowercase to match the other courses in the list
+        course_name = course_name.lower()
+        # If the supplied course is not in the list, add it and return True
+        if course_name not in cls._courses:
+            cls._courses.append(course_name)
+            return True
+
+        # Otherwise return false
+        return False
+
+    def display(self):
+        super().display()
+        print(f"ID: {self.student_id}, in year {self.year} of {self._course}")
