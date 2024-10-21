@@ -80,3 +80,22 @@ class Student(Person):
     def display(self) -> None:
         super().display()
         print(f"ID: {self.student_id}, in year {self.year} of {self._course}")
+
+    def __eq__(self, other) -> bool | NotImplemented:
+        if not isinstance(other, Student):
+            return NotImplemented
+
+        if not super().__eq__(other):
+            return False
+
+        if self.student_id != other.student_id:
+            return False
+        if self._course != other._course:
+            return False
+        if self.year != other.year:
+            return False
+
+        return True
+
+    def __ne__(self, other) -> bool | NotImplemented:
+        return not self == other

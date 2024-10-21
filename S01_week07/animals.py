@@ -46,7 +46,7 @@ class Dog(Animal):
         if not isinstance(other, Dog):
             return NotImplemented
 
-        if not super().__eq__(self, other):
+        if not super().__eq__(other):
             return False
 
         if self.breed != other.breed:
