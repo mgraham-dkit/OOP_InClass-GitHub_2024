@@ -30,6 +30,9 @@ class User:
 
     @staticmethod
     def validate_password(password:str) -> bool:
+        if len(password) < 8:
+            return False
+
         # if not any(x.isupper() for x in password):
         #     return False
         # if not any(x.islower() for x in password):
@@ -67,7 +70,7 @@ class User:
 
     def __repr__(self) -> str:
         temp_password = "*" * 8
-        return f"User[_username={self._username}, _password={temp_password}"
+        return f"User[_username={self._username}, _password={temp_password}]"
 
     def __str__(self) -> str:
         return f"Username: {self._username}"
@@ -112,3 +115,33 @@ class Moderator(User):
             groups.append(group)
 
         return groups
+
+    def __eq__(self, other: Moderator) -> bool:
+        if not super().__eq__(other):
+            return False
+        if not isinstance(other, Moderator):
+            return NotImplemented
+
+        if not self._modded_groups == other._modded_groups:
+            return False
+        return True
+
+    def __ne__(self, other: Moderator) -> bool:
+        return not self == other
+
+    def __repr__(self) -> str:
+        temp_password = "*" * 8
+        return f"Moderator[_username={self._username}, _password={temp_password}, _modded_groups={self._modded_groups}]"
+
+    def __str__(self) -> str:
+        return f"Username: {self._username}. Modded groups: {self._modded_groups}"
+
+    def __format__(self, format_spec: str) -> str:
+        match format_spec.lower():
+            case "short":
+                return f"{self._username} mods {len(self._modded_groups)} groups."
+            case "complete":
+                temp_password = "*" * 8
+                return f"{self._username}, password: {temp_password}, _modded_groups={self._modded_groups}"
+            case _:
+                return self.__str__()
