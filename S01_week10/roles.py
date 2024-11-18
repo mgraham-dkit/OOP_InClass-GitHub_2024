@@ -130,6 +130,27 @@ class User:
         else:
             return False
 
+    def __ge__(self, other: User) -> bool | NotImplemented:
+        if not isinstance(other, User):
+            return NotImplemented
+
+        if self._username >= other._username:
+            return True
+        else:
+            return False
+
+    def __lt__(self, other: User) -> bool | NotImplemented:
+        if not isinstance(other, User):
+            return NotImplemented
+
+        return self._username < other._username
+
+    def __le__(self, other: User) -> bool | NotImplemented:
+        if not isinstance(other, User):
+            return NotImplemented
+
+        return self._username <= other._username
+
 
 # Define a class that extends the User class (creates a more specific version of a User)
 class Moderator(User):
