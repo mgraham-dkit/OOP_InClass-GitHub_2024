@@ -2,6 +2,18 @@ from food import Pizza
 from food import Order
 
 
+def get_int(display_text: str) -> int:
+    valid = False
+    while not valid:
+        try:
+            num = int(input(display_text))
+            valid = True
+        except ValueError as e:
+            print("Integer required.")
+
+    return num
+
+
 def choose_topping():
     print("Available toppings:")
     for i, topping in enumerate(Pizza.topping_options):
@@ -12,7 +24,7 @@ def choose_topping():
     valid = False
     topping_choice = -1
     while not valid:
-        topping_choice = int(input("Please enter your selection: "))
+        topping_choice = get_int("Please enter your selection: ")
         if 0 < topping_choice <= len(Pizza.topping_options) or topping_choice == -1:
             valid = True
         else:
@@ -64,6 +76,7 @@ def create_pizza():
 
 
 order = Order()
+
 finished = False
 while not finished:
     new_pizza = create_pizza()
@@ -73,6 +86,5 @@ while not finished:
     choice = input("Do you wish to add another pizza to your order? (Y for yes, any other key for no):> ")
     if choice.upper() != "Y":
         finished = True
-
 
 print(order)
