@@ -1,0 +1,5 @@
+Product%%ID43%%First product's name%%13.99%%20%%80
+Product%%ID43%%Second product's name%%1.99%%5%%45
+Book%%ID77%%First Book Title%%1.08%%4.95%%30%%Book writer name%%Genre name&&Second genre name&&Third genre name
+Product%%ID53%%Third product's name%%3.99%%8.50%%15
+Book%%ID79%%Second Book Title%%2.50%%6.49%%20%%Author Two%%Genre name
