@@ -201,8 +201,10 @@ class Order:
         return "Items: \n" + "\n".join(str(item) for item in self.items.values())
 
 
-pizzaA = Pizza("Michelle's pizza", "Yummy", "medium", ['pepperoni','brie'])
-pizzaB = Pizza("My pizza", "Tasty", "medium", ["pineapple", "chicken"])
 
-print(pizzaA)
-print(pizzaB)
+if __name__ == "__main__":
+    pizzaA = Pizza("Michelle's pizza", "Yummy", "medium", ['pepperoni','brie'])
+    pizzaB = Pizza("My pizza", "Tasty", "medium", ["pineapple", "chicken"])
+
+    print(pizzaA)
+    print(pizzaB)
