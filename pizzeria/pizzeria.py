@@ -1,5 +1,5 @@
 from food import Pizza
-from food import Order
+from services import OrderService
 
 
 def get_int(display_text: str) -> int:
@@ -72,19 +72,24 @@ def create_pizza():
     pizza_name = input("Please enter your item's name: ")
     size = choose_size()
     toppings = get_toppings()
-    return Pizza(pizza_name, size=size, toppings=toppings)
+    rejected_toppings = order_service.add_pizza(pizza_name, pizza_size=size, pizza_toppings=toppings)
+    if rejected_toppings:
+        print("The following toppings could not be added:")
+        for i, rejected in enumerate(rejected_toppings):
+            print(f"{i+1}: {rejected}")
 
+    return pizza_name
 
-order = Order()
+order_service = OrderService()
 
 finished = False
 while not finished:
-    new_pizza = create_pizza()
+    pizza_name = create_pizza()
     print("Pizza complete!")
-    order.add_item(new_pizza)
-    print(f"You have ordered: {new_pizza} for €{new_pizza.calc_price()}")
+    created_pizza = order_service.get_pizza(pizza_name)
+    print(f"You have ordered: {created_pizza} for €{created_pizza.calc_price()}")
     choice = input("Do you wish to add another pizza to your order? (Y for yes, any other key for no):> ")
     if choice.upper() != "Y":
         finished = True
 
-print(order)
+#print(order_service.get_order())

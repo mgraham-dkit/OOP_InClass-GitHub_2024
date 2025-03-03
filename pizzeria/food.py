@@ -197,6 +197,9 @@ class Order:
         del self.items[item.name.lower()]
         return True
 
+    def get_item(self, item_name):
+        return self.items.get(item_name)
+
     def __str__(self):
         return "Items: \n" + "\n".join(str(item) for item in self.items.values())
 
