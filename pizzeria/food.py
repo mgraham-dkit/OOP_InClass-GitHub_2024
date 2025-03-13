@@ -98,6 +98,9 @@ class Pizza(Item):
     def get_size(self):
         return self._size
 
+    def get_toppings(self):
+        return list(self._toppings)
+
     def get_num_toppings(self):
         return len(self._toppings)
 
@@ -167,6 +170,7 @@ class Order:
 
         self.items = items
 
+
     def calc_price(self):
         total = 0
         for order in self.items.values():
@@ -198,7 +202,7 @@ class Order:
         return True
 
     def get_item(self, item_name):
-        return self.items.get(item_name)
+        return self.items.get(item_name.lower())
 
     def __str__(self):
         return "Items: \n" + "\n".join(str(item) for item in self.items.values())

@@ -80,16 +80,17 @@ def create_pizza():
 
     return pizza_name
 
-order_service = OrderService()
+if __name__ == "__main__":
+    order_service = OrderService()
 
-finished = False
-while not finished:
-    pizza_name = create_pizza()
-    print("Pizza complete!")
-    created_pizza = order_service.get_pizza(pizza_name)
-    print(f"You have ordered: {created_pizza} for €{created_pizza.calc_price()}")
-    choice = input("Do you wish to add another pizza to your order? (Y for yes, any other key for no):> ")
-    if choice.upper() != "Y":
-        finished = True
+    finished = False
+    while not finished:
+        pizza_name = create_pizza()
+        print("Pizza complete!")
+        created_pizza = order_service.get_pizza(pizza_name)
+        print(f"You have ordered: {created_pizza} for €{created_pizza.calc_price()}")
+        choice = input("Do you wish to add another pizza to your order? (Y for yes, any other key for no):> ")
+        if choice.upper() != "Y":
+            finished = True
 
-#print(order_service.get_order())
+    #print(order_service.get_order())

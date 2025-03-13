@@ -3,7 +3,7 @@ from food import Order, Pizza
 
 class OrderService:
     def __init__(self):
-        self.active_order = Order()
+        self.order = Order()
 
     def add_pizza(self, pizza_name, pizza_size, pizza_desc = "Custom", pizza_toppings = None):
         if not Pizza.validate_size(pizza_size):
@@ -13,7 +13,7 @@ class OrderService:
             pizza_toppings = []
 
         pizza = Pizza(pizza_name, pizza_desc, pizza_size)
-
+        print(f"Name: {pizza.name}")
         rejected_toppings = []
         for topping in pizza_toppings:
             added = pizza.add_topping(topping)
@@ -21,8 +21,20 @@ class OrderService:
                 rejected_toppings.append(topping)
 
 
-        self.active_order.add_item(pizza)
+        self.order.add_item(pizza)
         return rejected_toppings
 
     def get_pizza(self, pizza_name):
-        return self.active_order.get_item(pizza_name)
+        return self.order.get_item(pizza_name)
+
+    def get_order(self):
+        if not self.order:
+            return "Your order is empty."
+
+        order_summary = "Your Order:\n\n"
+        for name, pizza in self.order.items.items():
+            toppings = pizza.get_toppings()
+            order_summary += f"{name}: {pizza.get_size().capitalize()} with {', '.join(toppings) if toppings else 'no toppings'} - €{pizza.calc_price()}\n"
+
+        order_summary += f"\nTotal: €{self.order.calc_price()}"
+        return order_summary
