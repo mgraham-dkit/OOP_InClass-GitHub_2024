@@ -1,7 +1,22 @@
 from food import Order, Pizza
+from abc import ABC, abstractmethod
 
 
-class OrderService:
+class OrderInterface(ABC):
+    @abstractmethod
+    def add_pizza(self, pizza_name, pizza_size, pizza_desc="Custom", pizza_toppings=None):
+        pass
+
+    @abstractmethod
+    def get_pizza(self, pizza_name):
+        pass
+
+    @abstractmethod
+    def get_order(self):
+        pass
+
+
+class OrderService(OrderInterface):
     def __init__(self):
         self.order = Order()
 
