@@ -1,28 +1,15 @@
 import tkinter as tk
+from abc import ABC, abstractmethod
 from tkinter import messagebox
 
 from food import Pizza
 import pizzeria_controller
 
 
-class PizzeriaHomeMenu:
-    # STANDARD FEATURES
-    # Set up components in view
-    def __init__(self, app):
-        # Standard - required for every view
-        self.window = app
-        self.frame = tk.Frame(app.window)
-        # Set up variable to store controller
+class View(ABC):
+    def __init__(self, window):
+        self.frame = tk.Frame(window)
         self.controller = None
-
-        # Individual - unique to this view
-        self.add_button = tk.Button(self.frame, text="Add Pizza", command=self.show_pizza_menu, width=20)
-        self.finish_button = tk.Button(self.frame, text="Finish Order", width=20)
-
-    # Pack components into view - design!
-    def build(self):
-        self.add_button.pack(pady=5)
-        self.finish_button.pack(pady=5)
 
     def set_controller(self, controller):
         self.controller = controller
@@ -35,21 +22,37 @@ class PizzeriaHomeMenu:
     def hide(self):
         self.frame.pack_forget()
 
+    @abstractmethod
+    def build(self):
+        pass
+
+
+class PizzeriaHomeMenu(View):
+    # STANDARD FEATURES
+    # Set up components in view
+    def __init__(self, window):
+        super().__init__(window)
+
+        # Individual - unique to this view
+        self.add_button = tk.Button(self.frame, text="Add Pizza", command=self.show_pizza_menu, width=20)
+        self.finish_button = tk.Button(self.frame, text="Finish Order", width=20)
+
+    # Pack components into view - design!
+    def build(self):
+        self.add_button.pack(pady=5)
+        self.finish_button.pack(pady=5)
+
     # VIEW-SPECIFIC FEATURES
     def show_pizza_menu(self):
         # Update the main window to hide this view and show the next one
-        self.window.update_view(Pizzeria.CREATE_PIZZA)
+        self.controller.update_view(Pizzeria.CREATE_PIZZA)
 
 
-class CreatePizzaView:
+class CreatePizzaView(View):
     # STANDARD FEATURES
     # Set up components in view
-    def __init__(self, app):
-        # Standard - required for every view
-        self.window = app
-        self.frame = tk.Frame(app.window)
-        # Set up variable to store controller
-        self.controller = None
+    def __init__(self, window):
+        super().__init__(window)
 
         # Individual - unique to this view
         # Name data
@@ -111,18 +114,6 @@ class CreatePizzaView:
                 command=lambda t=topping: self.add_topping(t))
 
             button.grid(row=row, column=col, padx=5, pady=5)
-
-    # Allow injection of controller
-    def set_controller(self, controller):
-        self.controller = controller
-
-    # Display this view in the main window
-    def show(self):
-        self.frame.pack()
-
-    # Hide this view in the main window
-    def hide(self):
-        self.frame.pack_forget()
 
     # VIEW-SPECIFIC FEATURES
     def add_topping(self, topping):
@@ -195,12 +186,12 @@ class Pizzeria:
         self.window.minsize(300, 150)
 
     # Set up flexible collection of views
-    def define_views(self):
+    def define_views(self) -> dict[str, View]:
         # Create a dictionary of available views
         # Use constants (HOME, CREATE_PIZZA etc) as keys to standardise their references
         views = {
-            Pizzeria.HOME: PizzeriaHomeMenu(self),
-            Pizzeria.CREATE_PIZZA: CreatePizzaView(self)
+            Pizzeria.HOME: PizzeriaHomeMenu(self.window),
+            Pizzeria.CREATE_PIZZA: CreatePizzaView(self.window)
         }
 
         # Build all views in the system - this will not make them visible!
