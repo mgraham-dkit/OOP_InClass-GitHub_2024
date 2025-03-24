@@ -16,11 +16,17 @@ class View(ABC):
 
     # Display this view in the main window
     def show(self):
+        # Refresh the content of the view before showing it
+        self.refresh()
         self.frame.pack()
 
     # Hide this view in the main window
     def hide(self):
         self.frame.pack_forget()
+
+    # Implement a default refresh action that does nothing
+    def refresh(self):
+        pass
 
     @abstractmethod
     def build(self):
@@ -28,16 +34,16 @@ class View(ABC):
 
 
 class PizzeriaHomeMenu(View):
-    # STANDARD FEATURES
-    # Set up components in view
+    # STANDARD FEATURES MOVED TO ABSTRACT SUPER/BASE CLASS
     def __init__(self, window):
         super().__init__(window)
 
         # Individual - unique to this view
         self.add_button = tk.Button(self.frame, text="Add Pizza", command=self.show_pizza_menu, width=20)
-        self.finish_button = tk.Button(self.frame, text="Finish Order", width=20)
+        self.finish_button = tk.Button(self.frame, text="Finish Order", command=self.show_summary, width=20)
 
     # Pack components into view - design!
+    # This overrides the abstract method in the abstract super class
     def build(self):
         self.add_button.pack(pady=5)
         self.finish_button.pack(pady=5)
@@ -46,6 +52,10 @@ class PizzeriaHomeMenu(View):
     def show_pizza_menu(self):
         # Update the main window to hide this view and show the next one
         self.controller.update_view(Pizzeria.CREATE_PIZZA)
+
+    def show_summary(self):
+        # Update the main window to hide this view and show the next one
+        self.controller.update_view(Pizzeria.SUMMARY)
 
 
 class CreatePizzaView(View):
@@ -95,6 +105,13 @@ class CreatePizzaView(View):
 
         # Create pizza button
         self.create_button.grid(row=5, column=0, columnspan=2, pady=10)
+
+    def refresh(self):
+        # Clean up previous pizza creations
+        self.selected_toppings = []
+        self.toppings_list.delete(0, tk.END)
+        self.size_var.set("1")
+        self.pizza_name_entry.delete(0, tk.END)
 
     def set_sizes(self):
         for size in Pizza.size_options:
@@ -150,10 +167,33 @@ class CreatePizzaView(View):
         messagebox.showinfo("Pizza Created", f"You have ordered: {created_pizza} for €{created_pizza.calc_price()}")
 
 
+class PizzeriaSummaryView(View):
+    # STANDARD FEATURES MOVED TO ABSTRACT SUPER/BASE CLASS
+    def __init__(self, window):
+        super().__init__(window)
+
+        # Individual - unique to this view
+        self.summary_label = tk.Label(self.frame, text="Order Summary:")
+        self.order_details = tk.Label(self.frame)
+
+    # Pack components into view - design!
+    # This overrides the abstract method in the abstract super class
+    def build(self):
+        self.summary_label.grid(row=0, column=0, pady=5, sticky="N")
+        self.order_details.grid(row=1, column=0, pady=5, sticky="E")
+
+    # This overrides the default refresh action, as it needs to refresh the summary text before being displayed
+    def refresh(self):
+        summary = self.controller.get_order()
+        # Update the text in the summary window
+        self.order_details["text"] = summary
+
+
 class Pizzeria:
     # Establish constants as view names
     HOME = "home"
     CREATE_PIZZA = "create_pizza"
+    SUMMARY = "summary"
 
     # Set up overall application window
     # Should store the active view and a dictionary of view options
@@ -191,7 +231,8 @@ class Pizzeria:
         # Use constants (HOME, CREATE_PIZZA etc) as keys to standardise their references
         views = {
             Pizzeria.HOME: PizzeriaHomeMenu(self.window),
-            Pizzeria.CREATE_PIZZA: CreatePizzaView(self.window)
+            Pizzeria.CREATE_PIZZA: CreatePizzaView(self.window),
+            Pizzeria.SUMMARY: PizzeriaSummaryView(self.window)
         }
 
         # Build all views in the system - this will not make them visible!
