@@ -2,7 +2,7 @@ import services
 import pizzeria_views
 
 class PizzeriaController:
-    def __init__(self, pizzeria: pizzeria_views.Pizzeria, order_service: services.OrderService, pizza_service: services.PizzaServce):
+    def __init__(self, pizzeria: pizzeria_views.Pizzeria, order_service: services.OrderService, pizza_service: services.PizzaService):
         self.view = pizzeria
         self.order_service = order_service
         self.pizza_service = pizza_service
@@ -13,9 +13,9 @@ class PizzeriaController:
     def update_view(self, view_name):
         self.view.update_view(view_name)
 
-    # Trigger pizza to be added to order (queries model layer, gets result and passes back to view)
+    # Trigger pizza to be added to order (queries two services in model layer, gets result and passes back to view)
     def add_pizza(self, pizza_name, pizza_size, pizza_toppings):
-        pizza, rejected_toppings = self.pizza_service.create_pizza(pizza_name, pizza_size, pizza_toppings)
+        pizza, rejected_toppings = self.pizza_service.create_pizza(pizza_name, pizza_size, pizza_desc="Custom pizza", pizza_toppings=pizza_toppings)
         self.order_service.add_pizza(pizza)
         return rejected_toppings
 

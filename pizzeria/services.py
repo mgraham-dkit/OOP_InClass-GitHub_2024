@@ -38,7 +38,14 @@ class OrderService(OrderInterface):
         order_summary += f"\nTotal: €{self.order.calc_price()}"
         return order_summary
 
-class PizzaServce:
+
+class PizzaInterface(ABC):
+    @abstractmethod
+    def create_pizza(self, pizza_name, pizza_size, pizza_desc = "Custom", pizza_toppings = None):
+        pass
+
+
+class PizzaService(PizzaInterface):
     def create_pizza(self, pizza_name, pizza_size, pizza_desc = "Custom", pizza_toppings = None):
         if not Pizza.validate_size(pizza_size):
             pizza_size = "medium"
@@ -46,7 +53,7 @@ class PizzaServce:
         if pizza_toppings is None:
             pizza_toppings = []
 
-        pizza = Pizza(pizza_name, pizza_desc, pizza_size)
+        pizza = Pizza(pizza_name, pizza_desc=pizza_desc, size=pizza_size)
         print(f"Name: {pizza.name}")
         rejected_toppings = []
         for topping in pizza_toppings:
