@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import total_ordering
-
 
 class Item:
     def __init__(self, name: str, desc: str ="To be added later."):
