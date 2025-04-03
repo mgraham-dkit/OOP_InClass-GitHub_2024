@@ -27,7 +27,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
                 decoded = data.decode("utf-8")
                 print(f"Message received from {addr}: {decoded}")
 
-                components = decoded.split("%%")
+                components = decoded.split(service.DELIMITER)
                 response = service.INVALID
                 match components[0]:
                     case service.ECHO:
