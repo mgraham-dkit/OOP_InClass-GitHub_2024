@@ -10,6 +10,7 @@ class View(ABC):
     def __init__(self, window):
         self.frame = tk.Frame(window)
         self.controller = None
+        self.built = False
 
     def set_controller(self, controller):
         self.controller = controller
@@ -17,6 +18,9 @@ class View(ABC):
     # Display this view in the main window
     def show(self):
         # Refresh the content of the view before showing it
+        if not self.built:
+            self.build()
+
         self.refresh()
         self.frame.pack()
 
@@ -83,13 +87,15 @@ class CreatePizzaView(View):
         self.toppings_list = tk.Listbox(self.frame, height=5, width=30)
         self.toppings_frame = tk.Frame(self.frame)
 
-        self.set_toppings()
-
         # Create pizza action
         self.create_button = tk.Button(self.frame, text="Confirm", command=self.create_pizza)
 
     # Pack components into view - design!
     def build(self):
+        # Generate appropriate topping buttons for use in the view
+        # This is based of a call to the model (via the controller)
+        self.set_toppings()
+
         # Name
         self.pizza_name_label.grid(row=0, column=0, sticky="w")
         self.pizza_name_entry.grid(row=0, column=1, pady=5, sticky="w")
@@ -121,7 +127,8 @@ class CreatePizzaView(View):
         self.size_var.set("1")
 
     def set_toppings(self):
-        for i, topping in enumerate(Pizza.topping_options):
+        topping_options = self.controller.get_topping_options()
+        for i, topping in enumerate(topping_options):
             row = i // 3
             col = i % 3
             button = tk.Button(
@@ -226,6 +233,8 @@ class Pizzeria:
         self.window.minsize(300, 150)
 
     # Set up flexible collection of views
+    # This does not build the views, it just creates them
+    # Views are built the first time they are requested
     def define_views(self) -> dict[str, View]:
         # Create a dictionary of available views
         # Use constants (HOME, CREATE_PIZZA etc) as keys to standardise their references
@@ -234,10 +243,6 @@ class Pizzeria:
             Pizzeria.CREATE_PIZZA: CreatePizzaView(self.window),
             Pizzeria.SUMMARY: PizzeriaSummaryView(self.window)
         }
-
-        # Build all views in the system - this will not make them visible!
-        for view in views.values():
-            view.build()
 
         # Return the collection of views
         return views

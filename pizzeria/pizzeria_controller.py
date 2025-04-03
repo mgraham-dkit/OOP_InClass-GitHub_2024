@@ -13,6 +13,10 @@ class PizzeriaController:
     def update_view(self, view_name):
         self.view.update_view(view_name)
 
+    # Request list of all possible topping options from the Model
+    def get_topping_options(self):
+        return self.pizza_service.get_topping_options()
+
     # Trigger pizza to be added to order (queries two services in model layer, gets result and passes back to view)
     def add_pizza(self, pizza_name, pizza_size, pizza_toppings):
         pizza, rejected_toppings = self.pizza_service.create_pizza(pizza_name, pizza_size, pizza_desc="Custom pizza", pizza_toppings=pizza_toppings)

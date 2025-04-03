@@ -44,6 +44,11 @@ class PizzaInterface(ABC):
     def create_pizza(self, pizza_name, pizza_size, pizza_desc = "Custom", pizza_toppings = None):
         pass
 
+    @staticmethod
+    @abstractmethod
+    def get_topping_options():
+        pass
+    
 
 class PizzaService(PizzaInterface):
     def create_pizza(self, pizza_name, pizza_size, pizza_desc = "Custom", pizza_toppings = None):
@@ -62,3 +67,7 @@ class PizzaService(PizzaInterface):
                 rejected_toppings.append(topping)
 
         return pizza, rejected_toppings
+
+    @staticmethod
+    def get_topping_options():
+        return Pizza.topping_options
