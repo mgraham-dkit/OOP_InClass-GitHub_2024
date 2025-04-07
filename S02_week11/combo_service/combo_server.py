@@ -5,6 +5,43 @@ import combo_utils as service
 
 FORMAT = "%H:%M:%S:%f, %d/%m/%Y"
 
+
+def handle_echo(components):
+    if len(components) == 2 and components[1]:
+        return components[1]
+
+    return service.INVALID
+
+
+def handle_daytime(components):
+    if len(components) == 1:
+        current_date_time = dt.datetime.now()
+        return current_date_time.strftime(FORMAT)
+
+    return service.INVALID
+
+
+def handle_stats(components, counter):
+    if len(components) == 1:
+        return str(counter)
+
+    return service.INVALID
+
+
+def handle_request(decoded):
+    components = decoded.split(service.DELIMITER)
+    response = service.INVALID
+    match components[0]:
+        case service.ECHO:
+            response = handle_echo(components)
+        case service.DAYTIME:
+            response = handle_daytime(components)
+        case service.STATS:
+            response = handle_stats(components, msg_count)
+
+    return response
+
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
     server_socket.bind((service.HOST, service.PORT))
 
@@ -27,19 +64,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
                 decoded = data.decode("utf-8")
                 print(f"Message received from {addr}: {decoded}")
 
-                components = decoded.split(service.DELIMITER)
-                response = service.INVALID
-                match components[0]:
-                    case service.ECHO:
-                        if len(components) == 2 and components[1]:
-                            response = components[1]
-                    case service.DAYTIME:
-                        if len(components) == 1:
-                            current_date_time = dt.datetime.now()
-                            response = current_date_time.strftime(FORMAT)
-                    case service.STATS:
-                        if len(components) == 1:
-                            response = str(msg_count)
+                response = handle_request(decoded)
 
                 conn.sendall(bytes(response, "utf-8"))
 
