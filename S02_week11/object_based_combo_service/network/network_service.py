@@ -23,14 +23,27 @@ class TcpNetworkLayer(ITcpNetworkLayer):
 
     def disconnect(self) -> None:
         if self.data_socket:
-            self.data_socket.close()
+            try:
+                self.data_socket.close()
+            except:
+                raise ConnectionError("Exception occurred when closing socket")
         else:
-            raise ConnectionError("No socket available")
+            raise ValueError("No socket available")
 
     def send(self, message: str) -> None:
         if self.data_socket:
-            self.data_socket.sendall(bytes(message, "utf-8"))
+            try:
+                self.data_socket.sendall(bytes(message, "utf-8"))
+            except:
+                raise ConnectionError(f"Exception occurred when sending message")
+        else:
+            raise ValueError("No socket available")
 
     def receive(self) -> Any | None:
         if self.data_socket:
-            return self.data_socket.recv(1024)
+            try:
+                return self.data_socket.recv(1024)
+            except:
+                raise ConnectionError(f"Exception occurred when receiving message")
+        else:
+            raise ValueError("No socket available")
