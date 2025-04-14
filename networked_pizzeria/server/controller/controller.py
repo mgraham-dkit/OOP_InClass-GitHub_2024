@@ -1,5 +1,32 @@
+from __future__ import annotations
 import networked_pizzeria.service.pizzeria_service as service
 from networked_pizzeria.client.pizzeria_service.service_interfaces import PizzaInterface
+from networked_pizzeria.network.network_service import ITcpNetworkLayer
+
+
+class PizzeriaClientHandler:
+    def __init__(self, addr: tuple[str, int], network_layer: ITcpNetworkLayer, controller: PizzeriaController):
+        self.addr = addr
+        self.network_layer = network_layer
+        self.controller = controller
+
+    def handle_client(self) -> None:
+        client_session = True
+        while client_session:
+            print(f"Waiting for message from {self.addr}")
+            data = self.network_layer.receive()
+            if not data:
+                client_session = False
+                continue
+
+            decoded = data.decode("utf-8")
+            print(f"Message received from {self.addr}: {decoded}")
+
+            response = self.controller.handle_request(decoded)
+
+            self.network_layer.send(response)
+        self.network_layer.disconnect()
+        print(f"Client {self.addr} disconnected.")
 
 
 class PizzeriaController:

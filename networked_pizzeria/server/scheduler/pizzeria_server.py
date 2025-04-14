@@ -2,8 +2,8 @@ import socket
 
 import networked_pizzeria.service.pizzeria_service as service
 from networked_pizzeria.client.pizzeria_service.service_interfaces import PizzaInterface
-from networked_pizzeria.network.network_service import TcpNetworkLayer, ITcpNetworkLayer
-from networked_pizzeria.server.controller.controller import PizzeriaController
+from networked_pizzeria.network.network_service import TcpNetworkLayer
+from networked_pizzeria.server.controller.controller import PizzeriaController, PizzeriaClientHandler
 from networked_pizzeria.server.model.services import PizzaService
 
 
@@ -18,37 +18,17 @@ class PizzeriaServer:
 
             while server_session:
                 conn, addr = server_socket.accept()
+                # Create network layer object for client
                 client_network_layer = TcpNetworkLayer(data_socket=conn)
+                # Create controller to deal with logic of service
                 client_controller = PizzeriaController(pizza_service)
+                # Create handler to deal with processing request to confirm real
+                # (this could be combined with controller)
                 pizzeria_client = PizzeriaClientHandler(addr, client_network_layer, client_controller)
+                # Kick off client handling
                 pizzeria_client.handle_client()
 
         print("Server shutting down...")
-
-
-class PizzeriaClientHandler:
-    def __init__(self, addr: tuple[str, int], network_layer: ITcpNetworkLayer, controller: PizzeriaController):
-        self.addr = addr
-        self.network_layer = network_layer
-        self.controller = controller
-
-    def handle_client(self) -> None:
-        client_session = True
-        while client_session:
-            print(f"Waiting for message from {self.addr}")
-            data = self.network_layer.receive()
-            if not data:
-                client_session = False
-                continue
-
-            decoded = data.decode("utf-8")
-            print(f"Message received from {self.addr}: {decoded}")
-
-            response = self.controller.handle_request(decoded)
-
-            self.network_layer.send(response)
-        self.network_layer.disconnect()
-        print(f"Client {self.addr} disconnected.")
 
 
 if __name__ == "__main__":
