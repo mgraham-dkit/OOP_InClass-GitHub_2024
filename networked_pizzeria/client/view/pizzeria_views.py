@@ -12,25 +12,26 @@ class View(ABC):
         self.controller = None
         self.built = False
 
-    def set_controller(self, controller):
+    def set_controller(self, controller) -> None:
         self.controller = controller
 
     # Provide default action to close down application
-    def shutdown(self):
+    def shutdown(self) -> None:
         if messagebox.askokcancel("Quit", "Do you want to quit the application?"):
             self.controller.shutdown()
 
     # Display this view in the main window
-    def show(self):
+    def show(self) -> None:
         # Refresh the content of the view before showing it
         if not self.built:
             self.build()
+            self.built = True
 
         self.refresh()
         self.frame.pack()
 
     # Hide this view in the main window
-    def hide(self):
+    def hide(self) -> None:
         self.frame.pack_forget()
 
     # Implement a default refresh action that does nothing

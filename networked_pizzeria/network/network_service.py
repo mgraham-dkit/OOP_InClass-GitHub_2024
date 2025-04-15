@@ -73,7 +73,8 @@ class TcpNetworkLayer(ITcpNetworkLayer):
     def receive(self) -> Any | None:
         if self.data_socket and self.connected is True:
             try:
-                return self.data_socket.recv(1024)
+                msg = self.data_socket.recv(1024)
+                return msg.decode("utf-8")
             except:
                 raise ConnectionError(f"Exception occurred when receiving message")
         else:

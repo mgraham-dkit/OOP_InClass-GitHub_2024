@@ -3,10 +3,6 @@ from abc import ABC, abstractmethod
 
 class OrderInterface(ABC):
     @abstractmethod
-    def add_pizza(self, pizza):
-        pass
-
-    @abstractmethod
     def get_pizza(self, pizza_name):
         pass
 

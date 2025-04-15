@@ -23,10 +23,9 @@ class PizzeriaController:
     def get_size_options(self):
         return self.pizza_service.get_size_options()
 
-    # Trigger pizza to be added to order (queries two services in model layer, gets result and passes back to view)
+    # Trigger pizza to be added to order (Amended to query only pizza service (server side will fold in order process), gets result and passes back to view)
     def add_pizza(self, pizza_name, pizza_size, pizza_toppings):
-        pizza, rejected_toppings = self.pizza_service.create_pizza(pizza_name, pizza_size, pizza_desc="Custom pizza", pizza_toppings=pizza_toppings)
-        self.order_service.add_pizza(pizza)
+        rejected_toppings = self.pizza_service.create_pizza(pizza_name, pizza_size, pizza_desc="Custom pizza", pizza_toppings=pizza_toppings)
         return rejected_toppings
 
     # Retrieve named pizza from order (queries model layer, gets result and passes back to view)
